@@ -1,14 +1,4 @@
-import {
-  useDisclosure,
-  chakra,
-  Flex,
-  HStack,
-  Text,
-  Badge,
-  Icon,
-  Button,
-  Box,
-} from "@chakra-ui/react";
+import { chakra, Flex, HStack, Text, Box } from "@chakra-ui/react";
 import React from "react";
 import Profile from "./ProfileMenu";
 import { Link } from "react-router-dom";
@@ -20,7 +10,7 @@ interface HeaderProps {
 
 const Header = (props: HeaderProps) => {
   const { onLogout } = props;
-  const mobileNav = useDisclosure();
+
   return (
     <React.Fragment>
       <chakra.header

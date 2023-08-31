@@ -1,6 +1,5 @@
 // 1. Import `extendTheme`
 import { extendTheme } from "@chakra-ui/react";
-import background from "../assets/background.jpg";
 import Container from "./components/Container";
 
 // 2. Call `extendTheme` and pass your custom values

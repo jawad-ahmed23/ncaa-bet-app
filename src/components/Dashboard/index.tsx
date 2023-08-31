@@ -2,21 +2,16 @@ import { useState } from "react";
 import {
   Box,
   Text,
-  Grid,
-  GridItem,
   Image,
   HStack,
   VStack,
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
-  Checkbox,
   Stack,
 } from "@chakra-ui/react";
 import { BsCheckLg } from "react-icons/bs";
