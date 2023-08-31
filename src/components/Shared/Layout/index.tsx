@@ -7,9 +7,7 @@ const Layout = ({ children, onLogout }: any) => {
       <Box>
         <Header onLogout={onLogout} />
         {/* Content */}
-        <Box p="4" mb="100px">
-          {children}
-        </Box>
+        <Box p="4">{children}</Box>
       </Box>
     </Box>
   );
