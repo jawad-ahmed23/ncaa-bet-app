@@ -18,13 +18,14 @@ import { BsCheckLg } from "react-icons/bs";
 import team1Src from "../../assets/ncaa-app/team-1.png";
 import team2Src from "../../assets/ncaa-app/team-2.png";
 
-const CustomCheckbox = () => {
+const CustomCheckbox = ({ notSelected }: { notSelected?: boolean }) => {
   const [isChecked, setIsChecked] = useState(false);
   return (
     <Box
       w="35px"
       h="35px"
-      bg={isChecked ? "#011627" : "#d9d9d9"}
+      bg={isChecked ? "#011627" : notSelected ? "#d9d9d9" : ""}
+      border={notSelected ? "2px solid #d9d9d9" : "2px solid #011627"}
       rounded="lg"
       onClick={() => setIsChecked(!isChecked)}
       cursor="pointer"
@@ -155,7 +156,7 @@ export default function CDashboard() {
                       <Box bgColor="#FF9F1C" p="2" rounded="lg">
                         -7.5
                       </Box>
-                      <CustomCheckbox />
+                      <CustomCheckbox notSelected />
                     </HStack>
                     <HStack justifyContent="center">
                       <Box bgColor="#FF9F1C" p="2" rounded="lg">
@@ -201,7 +202,7 @@ export default function CDashboard() {
                       <Box bgColor="#FF9F1C" p="2" rounded="lg">
                         -7.5
                       </Box>
-                      <CustomCheckbox />
+                      <CustomCheckbox notSelected />
                     </HStack>
                     <HStack justifyContent="center">
                       <Box bgColor="#FF9F1C" p="2" rounded="lg">
@@ -247,7 +248,7 @@ export default function CDashboard() {
                       <Box bgColor="#FF9F1C" p="2" rounded="lg">
                         -7.5
                       </Box>
-                      <CustomCheckbox />
+                      <CustomCheckbox notSelected />
                     </HStack>
                     <HStack justifyContent="center">
                       <Box bgColor="#FF9F1C" p="2" rounded="lg">
@@ -293,7 +294,7 @@ export default function CDashboard() {
                       <Box bgColor="#FF9F1C" p="2" rounded="lg">
                         -7.5
                       </Box>
-                      <CustomCheckbox />
+                      <CustomCheckbox notSelected />
                     </HStack>
                     <HStack justifyContent="center">
                       <Box bgColor="#FF9F1C" p="2" rounded="lg">
