@@ -43,10 +43,10 @@ const CustomCheckbox = () => {
 
 export default function CDashboard() {
   return (
-    <Box>
+    <Box maxW={{ base: "full", md: "80%" }} mx="auto">
       <Stack direction={{ base: "column", md: "row" }} gap="5" h="full">
         <Box
-          w={{ base: "full", md: "30%" }}
+          w={{ base: "full", md: "20%" }}
           bg="#fff"
           color="brand.primary"
           px="5"
@@ -105,7 +105,7 @@ export default function CDashboard() {
         </Box>
 
         <Box
-          w={{ base: "full", md: "70%" }}
+          w={{ base: "full", md: "80%" }}
           bgColor="#fff"
           color="brand.primary"
           px="5"
@@ -156,9 +156,15 @@ export default function CDashboard() {
                     </VStack>
                   </Td>
                   <Td>
-                    <HStack justifyContent="center">
+                    <HStack justifyContent="center" mb="5">
                       <Box bgColor="#FF9F1C" p="2" rounded="lg">
                         -7.5
+                      </Box>
+                      <CustomCheckbox />
+                    </HStack>
+                    <HStack justifyContent="center">
+                      <Box bgColor="#FF9F1C" p="2" rounded="lg">
+                        +7.5
                       </Box>
                       <CustomCheckbox />
                     </HStack>
@@ -196,9 +202,15 @@ export default function CDashboard() {
                     </VStack>
                   </Td>
                   <Td>
-                    <HStack justifyContent="center">
+                    <HStack justifyContent="center" mb="5">
                       <Box bgColor="#FF9F1C" p="2" rounded="lg">
                         -7.5
+                      </Box>
+                      <CustomCheckbox />
+                    </HStack>
+                    <HStack justifyContent="center">
+                      <Box bgColor="#FF9F1C" p="2" rounded="lg">
+                        +7.5
                       </Box>
                       <CustomCheckbox />
                     </HStack>
@@ -236,9 +248,15 @@ export default function CDashboard() {
                     </VStack>
                   </Td>
                   <Td>
-                    <HStack justifyContent="center">
+                    <HStack justifyContent="center" mb="5">
                       <Box bgColor="#FF9F1C" p="2" rounded="lg">
                         -7.5
+                      </Box>
+                      <CustomCheckbox />
+                    </HStack>
+                    <HStack justifyContent="center">
+                      <Box bgColor="#FF9F1C" p="2" rounded="lg">
+                        +7.5
                       </Box>
                       <CustomCheckbox />
                     </HStack>
@@ -276,9 +294,15 @@ export default function CDashboard() {
                     </VStack>
                   </Td>
                   <Td>
-                    <HStack justifyContent="center">
+                    <HStack justifyContent="center" mb="5">
                       <Box bgColor="#FF9F1C" p="2" rounded="lg">
                         -7.5
+                      </Box>
+                      <CustomCheckbox />
+                    </HStack>
+                    <HStack justifyContent="center">
+                      <Box bgColor="#FF9F1C" p="2" rounded="lg">
+                        +7.5
                       </Box>
                       <CustomCheckbox />
                     </HStack>
