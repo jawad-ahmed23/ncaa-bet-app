@@ -42,8 +42,8 @@ export default function CSignIn(props: CSignInProps) {
   };
 
   return (
-    <VStack mt="10">
-      <Text as="h1" color="white" fontWeight="semibold" fontSize="3xl">
+    <VStack mt="20">
+      <Text as="h1" color="black" fontWeight="semibold" fontSize="3xl" mb="5">
         Login
       </Text>
       <VStack
