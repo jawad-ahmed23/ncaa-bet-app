@@ -1,11 +1,11 @@
 import { Box } from "@chakra-ui/react";
 import Header from "./Header";
 
-const Layout = ({ children, onLogout }: any) => {
+const Layout = ({ children }: any) => {
   return (
     <Box minH="100vh">
       <Box>
-        <Header onLogout={onLogout} />
+        <Header />
         {/* Content */}
         <Box p="4">{children}</Box>
       </Box>

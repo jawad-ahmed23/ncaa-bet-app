@@ -4,7 +4,7 @@ import { Container, Box } from "@chakra-ui/react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { useDispatch } from "react-redux";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { CSignin } from "../../components";
 // import { useSignIn } from "../../hooks";

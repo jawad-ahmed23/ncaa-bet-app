@@ -1,4 +1,4 @@
-import { chakra, Flex, HStack, Text, Box } from "@chakra-ui/react";
+import { chakra, Flex, HStack, Text } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -6,7 +6,6 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../../firebase";
 import Profile from "./ProfileMenu";
 import { Link } from "react-router-dom";
-import { IoNotificationsOutline } from "react-icons/io5";
 import { RootState } from "../../../slices/store";
 import { setCurrentUser } from "../../../slices/app";
 

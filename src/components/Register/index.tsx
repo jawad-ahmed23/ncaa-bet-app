@@ -1,14 +1,8 @@
 import { useEffect } from "react";
 import { VStack, Text, Button, Grid, GridItem } from "@chakra-ui/react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import {
-  useForm,
-  SubmitHandler,
-  DeepMap,
-  FieldError,
-  Controller,
-} from "react-hook-form";
+import { useForm, SubmitHandler, DeepMap, FieldError } from "react-hook-form";
 import { EMAIL_REGEX } from "../../constants";
 import { CInput } from "..";
 
@@ -27,8 +21,6 @@ export interface CRegisterProps {
 export default function Register(props: CRegisterProps) {
   const { onRegisterSubmit, isLoading, errors: apiErrors } = props;
 
-  const [searchParams] = useSearchParams();
-
   //   console.log({
   //     isLoading,
   //   });
@@ -38,7 +30,6 @@ export default function Register(props: CRegisterProps) {
     handleSubmit,
     formState: { errors },
     setError,
-    control,
   } = useForm<RegisterFormType>();
 
   useEffect(() => {

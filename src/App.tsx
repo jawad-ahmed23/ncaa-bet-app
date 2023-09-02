@@ -9,7 +9,7 @@ import Register from "./containers/Register";
 import "./App.css";
 import { setCurrentUser } from "./slices/app";
 import { doc, getDoc } from "firebase/firestore";
-import { CSpinner, Layout } from "./components";
+import { CSpinner } from "./components";
 import Guard from "./components/Shared/Guard";
 
 const routes = [
