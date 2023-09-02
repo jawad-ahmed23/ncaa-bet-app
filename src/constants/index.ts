@@ -3,4 +3,4 @@ export const EMAIL_REGEX =
   /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
 export const ODDS_API_KEY =
-  process.env.ODDS_API_KEY || "f0092c7ebb6c0e21fcab795315fcf726";
+  process.env.ODDS_API_KEY || "f3c4d5f4649fb501869fe040d7c73e9f";

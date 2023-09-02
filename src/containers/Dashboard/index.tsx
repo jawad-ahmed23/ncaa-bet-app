@@ -13,17 +13,7 @@ export default function Dashboard() {
   const { currentUser } = useSelector((state: RootState) => state.app);
   const { data, isLoading: getDataLoading } = useGetSportsData();
 
-  const onAddGuess = async ({
-    home_team,
-    away_team,
-    key,
-    point,
-  }: {
-    home_team: string;
-    away_team: string;
-    key: string;
-    point: number;
-  }) => {
+  const onAddGuess = async ({ team }: { team: string }) => {
     try {
       setIsLoading(true);
       const usersRef = collection(db, "users");
@@ -40,20 +30,14 @@ export default function Dashboard() {
             await updateDoc(doc(usersRef, currentUser.uid), {
               currentGuesses: [
                 {
-                  home_team,
-                  away_team,
-                  key,
-                  point,
+                  team,
                 },
               ],
             });
             dispatch(
               setCurrentGuesses([
                 {
-                  home_team,
-                  away_team,
-                  key,
-                  point,
+                  team,
                 },
               ])
             );
@@ -64,16 +48,45 @@ export default function Dashboard() {
               return;
             }
             await updateDoc(doc(usersRef, currentUser.uid), {
-              currentGuesses: [
-                ...currentGuesses,
-                { home_team, away_team, key, point },
-              ],
+              currentGuesses: [...currentGuesses, { team }],
+            });
+            dispatch(setCurrentGuesses([...currentGuesses, { team }]));
+          }
+        }
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log("ADD GUESS ERROR", error);
+    }
+  };
+
+  const onRemoveGuess = async ({ team }: { team: string }) => {
+    try {
+      setIsLoading(true);
+      const usersRef = collection(db, "users");
+
+      if (currentUser) {
+        const user = await getDoc(doc(usersRef, currentUser.uid));
+
+        const userData = user.data();
+
+        if (userData) {
+          const { currentGuesses } = userData;
+
+          if (currentGuesses) {
+            await updateDoc(doc(usersRef, currentUser.uid), {
+              currentGuesses: currentGuesses.filter(
+                (doc: { team: string }) => doc.team !== team
+              ),
             });
             dispatch(
-              setCurrentGuesses([
-                ...currentGuesses,
-                { home_team, away_team, key, point },
-              ])
+              setCurrentGuesses(
+                currentGuesses.filter(
+                  (doc: { team: string }) => doc.team !== team
+                )
+              )
             );
           }
         }
@@ -92,6 +105,7 @@ export default function Dashboard() {
         data={data?.data}
         isLoading={getDataLoading}
         onAddGuess={onAddGuess}
+        onRemoveGuess={onRemoveGuess}
         addGuessLoading={isLoading}
       />
     </Layout>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import {
   Box,
@@ -18,33 +17,41 @@ import {
 import { BsCheckLg } from "react-icons/bs";
 import { CSpinner } from "..";
 import moment from "moment";
+import { RootState } from "../../slices/store";
 
 interface CustomCheckbox extends BoxProps {
   disabled?: boolean;
+  isSelected: boolean;
+  limitExceed: boolean;
 }
 
-const CustomCheckbox = ({ disabled, ...otherProps }: CustomCheckbox) => {
-  const [isChecked, setIsChecked] = useState(false);
+const CustomCheckbox = ({
+  isSelected,
+  disabled,
+  limitExceed,
+  ...otherProps
+}: CustomCheckbox) => {
   return (
     <Box
       w="35px"
       h="35px"
-      bg={isChecked ? "#011627" : disabled ? "#d9d9d9" : ""}
-      border={disabled ? "2px solid #d9d9d9" : "2px solid #011627"}
+      bg={isSelected ? "#011627" : disabled || limitExceed ? "#d9d9d9" : ""}
+      border={
+        disabled || limitExceed ? "2px solid #d9d9d9" : "2px solid #011627"
+      }
       rounded="lg"
-      onClick={() => setIsChecked(!isChecked)}
       cursor="pointer"
       display="grid"
       placeContent="center"
-      pointerEvents={disabled ? "none" : "all"}
+      pointerEvents={(disabled || limitExceed) && !isSelected ? "none" : "all"}
       {...otherProps}
     >
-      {isChecked ? <BsCheckLg color="#FF9F1C" size="30px" /> : null}
+      {isSelected ? <BsCheckLg color="#FF9F1C" size="30px" /> : null}
     </Box>
   );
 };
 
-interface IMatchObject {
+export interface IMatchObject {
   id: string;
   commence_time: string;
   home_team: string;
@@ -66,27 +73,16 @@ interface IMatchObject {
 }
 
 interface CDashboardProps {
-  data: IMatchObject[];
+  data?: IMatchObject[];
   isLoading: boolean;
-  onAddGuess: ({
-    home_team,
-    away_team,
-    key,
-    point,
-  }: {
-    home_team: string;
-    away_team: string;
-    key: string;
-    point: number;
-  }) => Promise<void>;
+  onAddGuess: ({ team }: { team: string }) => Promise<void>;
+  onRemoveGuess: ({ team }: { team: string }) => Promise<void>;
   addGuessLoading: boolean;
 }
 
 export default function CDashboard(props: CDashboardProps) {
-  // const {} =
-  const { data, isLoading, onAddGuess, addGuessLoading } = props;
-
-  console.log(addGuessLoading);
+  const { currentUser } = useSelector((state: RootState) => state.app);
+  const { data, isLoading, onAddGuess, addGuessLoading, onRemoveGuess } = props;
 
   return (
     <Box maxW={{ base: "full", md: "80%" }} mx="auto">
@@ -187,131 +183,295 @@ export default function CDashboard(props: CDashboardProps) {
                 </Thead>
                 <Tbody>
                   {data
-                    ? data.map((sport) => (
-                        <Tr key={sport.id} bgColor="#F3F4F7">
-                          <Td textAlign="center" fontSize="base" lineHeight="8">
-                            <Text>
-                              {moment(sport.commence_time).format(
-                                "dddd MMM, YYYY HH:mm:A"
-                              )}
-                            </Text>
-                          </Td>
-                          <Td>
-                            <VStack align="center">
-                              <HStack>
-                                {/* <Image src={team1Src} width={"20px"} /> */}
-                                <Text color="#A0A8B1">{sport.home_team}</Text>
-                              </HStack>
-                              <Text color="#A0A8B1">vs</Text>
-                              <HStack>
-                                {/* <Image src={team2Src} width={"20px"} /> */}
-                                <Text color="#A0A8B1">{sport.away_team}</Text>
-                              </HStack>
-                            </VStack>
-                          </Td>
-                          <Td>
-                            <HStack justifyContent="center" mb="5">
-                              {sport.bookmakers[0].markets[0] ? (
-                                <>
-                                  <Box bgColor="#FF9F1C" p="2" rounded="lg">
-                                    {
-                                      sport.bookmakers[0].markets[0].outcomes[1]
-                                        .point
-                                    }
-                                  </Box>
-                                  <CustomCheckbox
-                                    onClick={async () => {
-                                      await onAddGuess({
-                                        away_team: sport.away_team,
-                                        home_team: sport.home_team,
-                                        key: "spreads",
-                                        point:
-                                          sport.bookmakers[0].markets[0]
-                                            .outcomes[1].point,
-                                      });
-                                    }}
-                                    // isSelected
-                                  />
-                                </>
-                              ) : null}
-                            </HStack>
-                            <HStack justifyContent="center">
-                              {sport.bookmakers[0].markets[0] ? (
-                                <>
-                                  <Box bgColor="#FF9F1C" p="2" rounded="lg">
+                    ? data.map((sport) => {
+                        return (
+                          <Tr key={sport.id} bgColor="#F3F4F7">
+                            <Td
+                              textAlign="center"
+                              fontSize="base"
+                              lineHeight="8"
+                            >
+                              <Text>
+                                {moment(sport.commence_time).format(
+                                  "dddd MMM, YYYY HH:mm:A"
+                                )}
+                              </Text>
+                            </Td>
+                            <Td>
+                              <VStack align="center">
+                                <HStack>
+                                  {/* <Image src={team1Src} width={"20px"} /> */}
+                                  <Text color="#A0A8B1">
                                     {
                                       sport.bookmakers[0].markets[0].outcomes[0]
-                                        .point
+                                        .name
                                     }
-                                  </Box>
-                                  <CustomCheckbox
-                                    onClick={async () => {
-                                      await onAddGuess({
-                                        away_team: sport.away_team,
-                                        home_team: sport.home_team,
-                                        key: "spreads",
-                                        point:
-                                          sport.bookmakers[0].markets[0]
-                                            .outcomes[0].point,
-                                      });
-                                    }}
-                                  />
-                                </>
-                              ) : null}
-                            </HStack>
-                          </Td>
-                          <Td>
-                            <HStack justifyContent="center" mb="4">
-                              {sport.bookmakers[0].markets[1] ? (
-                                <>
-                                  <Box bgColor="#FF9F1C" p="2" rounded="lg">
+                                  </Text>
+                                </HStack>
+                                <Text color="#A0A8B1">vs</Text>
+                                <HStack>
+                                  {/* <Image src={team2Src} width={"20px"} /> */}
+                                  <Text color="#A0A8B1">
                                     {
-                                      sport.bookmakers[0].markets[1].outcomes[0]
-                                        .point
+                                      sport.bookmakers[0].markets[0].outcomes[1]
+                                        .name
                                     }
-                                  </Box>
-                                  <CustomCheckbox
-                                    onClick={async () => {
-                                      await onAddGuess({
-                                        away_team: sport.away_team,
-                                        home_team: sport.home_team,
-                                        key: "totals",
-                                        point:
-                                          sport.bookmakers[0].markets[1]
-                                            .outcomes[0].point,
-                                      });
-                                    }}
-                                  />
-                                </>
-                              ) : null}
-                            </HStack>
-                            <HStack justifyContent="center">
-                              {sport.bookmakers[0].markets[1] ? (
-                                <>
-                                  <Box bgColor="#FF9F1C" p="2" rounded="lg">
-                                    {
-                                      sport.bookmakers[0].markets[1].outcomes[1]
-                                        .point
-                                    }
-                                  </Box>
-                                  <CustomCheckbox
-                                    onClick={async () => {
-                                      await onAddGuess({
-                                        away_team: sport.away_team,
-                                        home_team: sport.home_team,
-                                        key: "totals",
-                                        point:
-                                          sport.bookmakers[0].markets[1]
-                                            .outcomes[1].point,
-                                      });
-                                    }}
-                                  />
-                                </>
-                              ) : null}
-                            </HStack>
-                          </Td>
-                        </Tr>
-                      ))
+                                  </Text>
+                                </HStack>
+                              </VStack>
+                            </Td>
+
+                            {/* ---------------------- */}
+                            <Td>
+                              <HStack justifyContent="center" mb="5">
+                                {sport.bookmakers[0].markets[0] ? (
+                                  <>
+                                    <Box bgColor="#FF9F1C" p="2" rounded="lg">
+                                      {
+                                        sport.bookmakers[0].markets[0]
+                                          ?.outcomes[0].point
+                                      }
+                                    </Box>
+                                    <CustomCheckbox
+                                      onClick={async () => {
+                                        if (
+                                          currentUser
+                                            ? currentUser.currentGuesses.some(
+                                                (el: { team: string }) =>
+                                                  el.team ===
+                                                  sport.bookmakers[0].markets[0]
+                                                    ?.outcomes[0].name
+                                              )
+                                            : false
+                                        ) {
+                                          await onRemoveGuess({
+                                            team: sport.bookmakers[0].markets[0]
+                                              ?.outcomes[0].name,
+                                          });
+                                        } else {
+                                          await onAddGuess({
+                                            team: sport.bookmakers[0].markets[0]
+                                              ?.outcomes[0].name,
+                                          });
+                                        }
+                                      }}
+                                      isSelected={
+                                        currentUser
+                                          ? currentUser.currentGuesses.some(
+                                              (el: { team: string }) =>
+                                                el.team ===
+                                                sport.bookmakers[0].markets[0]
+                                                  ?.outcomes[0].name
+                                            )
+                                          : false
+                                      }
+                                      disabled={
+                                        currentUser
+                                          ? currentUser.currentGuesses.some(
+                                              (el: { team: string }) =>
+                                                el.team ===
+                                                sport.bookmakers[0].markets[0]
+                                                  ?.outcomes[1].name
+                                            )
+                                          : false
+                                      }
+                                      limitExceed={
+                                        currentUser?.currentGuesses?.length ===
+                                        3
+                                      }
+                                    />
+                                  </>
+                                ) : null}
+                              </HStack>
+                              <HStack justifyContent="center">
+                                {sport.bookmakers[0].markets[0] ? (
+                                  <>
+                                    <Box bgColor="#FF9F1C" p="2" rounded="lg">
+                                      {
+                                        sport.bookmakers[0].markets[0]
+                                          ?.outcomes[1].point
+                                      }
+                                    </Box>
+                                    <CustomCheckbox
+                                      onClick={async () => {
+                                        if (
+                                          currentUser
+                                            ? currentUser.currentGuesses.some(
+                                                (el: { team: string }) =>
+                                                  el.team ===
+                                                  sport.bookmakers[0].markets[0]
+                                                    ?.outcomes[1].name
+                                              )
+                                            : false
+                                        ) {
+                                          await onRemoveGuess({
+                                            team: sport.bookmakers[0].markets[0]
+                                              ?.outcomes[1].name,
+                                          });
+                                        } else {
+                                          await onAddGuess({
+                                            team: sport.bookmakers[0].markets[0]
+                                              ?.outcomes[1].name,
+                                          });
+                                        }
+                                      }}
+                                      isSelected={
+                                        currentUser
+                                          ? currentUser.currentGuesses.some(
+                                              (el: { team: string }) =>
+                                                el.team ===
+                                                sport.bookmakers[0].markets[0]
+                                                  ?.outcomes[1].name
+                                            )
+                                          : false
+                                      }
+                                      disabled={
+                                        currentUser
+                                          ? currentUser.currentGuesses.some(
+                                              (el: { team: string }) =>
+                                                el.team ===
+                                                sport.bookmakers[0].markets[0]
+                                                  ?.outcomes[0].name
+                                            )
+                                          : false
+                                      }
+                                      limitExceed={
+                                        currentUser?.currentGuesses?.length ===
+                                        3
+                                      }
+                                    />
+                                  </>
+                                ) : null}
+                                {addGuessLoading ? <CSpinner /> : null}
+                              </HStack>
+                            </Td>
+
+                            {/* ----------------------------- */}
+                            <Td>
+                              <HStack justifyContent="center" mb="4">
+                                {sport.bookmakers[0].markets[1] ? (
+                                  <>
+                                    <Box bgColor="#FF9F1C" p="2" rounded="lg">
+                                      {
+                                        sport.bookmakers[0].markets[1]
+                                          ?.outcomes[0].point
+                                      }
+                                    </Box>
+                                    <CustomCheckbox
+                                      onClick={async () => {
+                                        if (
+                                          currentUser
+                                            ? currentUser.currentGuesses.some(
+                                                (el: { team: string }) =>
+                                                  el.team ===
+                                                  sport.bookmakers[0].markets[0]
+                                                    ?.outcomes[0].name
+                                              )
+                                            : false
+                                        ) {
+                                          await onRemoveGuess({
+                                            team: sport.bookmakers[0].markets[0]
+                                              ?.outcomes[0].name,
+                                          });
+                                        } else {
+                                          await onAddGuess({
+                                            team: sport.bookmakers[0].markets[0]
+                                              ?.outcomes[0].name,
+                                          });
+                                        }
+                                      }}
+                                      isSelected={
+                                        currentUser
+                                          ? currentUser.currentGuesses.some(
+                                              (el: { team: string }) =>
+                                                el.team ===
+                                                sport.bookmakers[0].markets[0]
+                                                  ?.outcomes[0].name
+                                            )
+                                          : false
+                                      }
+                                      disabled={
+                                        currentUser
+                                          ? currentUser.currentGuesses.some(
+                                              (el: { team: string }) =>
+                                                el.team ===
+                                                sport.bookmakers[0].markets[0]
+                                                  ?.outcomes[1].name
+                                            )
+                                          : false
+                                      }
+                                      limitExceed={
+                                        currentUser?.currentGuesses?.length ===
+                                        3
+                                      }
+                                    />
+                                  </>
+                                ) : null}
+                              </HStack>
+                              <HStack justifyContent="center">
+                                {sport.bookmakers[0].markets[1] ? (
+                                  <>
+                                    <Box bgColor="#FF9F1C" p="2" rounded="lg">
+                                      {
+                                        sport.bookmakers[0].markets[1]
+                                          ?.outcomes[1].point
+                                      }
+                                    </Box>
+                                    <CustomCheckbox
+                                      onClick={async () => {
+                                        if (
+                                          currentUser
+                                            ? currentUser.currentGuesses.some(
+                                                (el: { team: string }) =>
+                                                  el.team ===
+                                                  sport.bookmakers[0].markets[0]
+                                                    ?.outcomes[1].name
+                                              )
+                                            : false
+                                        ) {
+                                          await onRemoveGuess({
+                                            team: sport.bookmakers[0].markets[0]
+                                              ?.outcomes[1].name,
+                                          });
+                                        } else {
+                                          await onAddGuess({
+                                            team: sport.bookmakers[0].markets[0]
+                                              ?.outcomes[1].name,
+                                          });
+                                        }
+                                      }}
+                                      isSelected={
+                                        currentUser
+                                          ? currentUser.currentGuesses.some(
+                                              (el: { team: string }) =>
+                                                el.team ===
+                                                sport.bookmakers[0].markets[0]
+                                                  ?.outcomes[1].name
+                                            )
+                                          : false
+                                      }
+                                      disabled={
+                                        currentUser
+                                          ? currentUser.currentGuesses.some(
+                                              (el: { team: string }) =>
+                                                el.team ===
+                                                sport.bookmakers[0].markets[0]
+                                                  ?.outcomes[0].name
+                                            )
+                                          : false
+                                      }
+                                      limitExceed={
+                                        currentUser?.currentGuesses?.length ===
+                                        3
+                                      }
+                                    />
+                                  </>
+                                ) : null}
+                              </HStack>
+                            </Td>
+                          </Tr>
+                        );
+                      })
                     : null}
                 </Tbody>
               </Table>

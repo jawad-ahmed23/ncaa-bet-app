@@ -36,7 +36,7 @@ const Header = () => {
         <Flex alignItems="center" justifyContent="space-between">
           <Text
             as={Link}
-            to="/dashboard"
+            to="/"
             color="#000"
             borderTop="2px solid #2DCC70"
             py="5"

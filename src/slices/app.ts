@@ -5,10 +5,7 @@ interface ICurrentUser {
   email: string;
   name: string;
   currentGuesses: {
-    home_team: string;
-    away_team: string;
-    key: string;
-    point: number;
+    team: string;
   }[];
 }
 

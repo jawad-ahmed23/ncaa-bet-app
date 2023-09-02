@@ -10,6 +10,7 @@ import {
 
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { FaPowerOff } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 interface ProfileProps {
   onLogout: () => void;
@@ -35,6 +36,16 @@ export default function Profile(props: ProfileProps) {
       />
 
       <MenuList rounded="3px">
+        <MenuItem
+          py="1"
+          _hover={{
+            color: "brand.primary",
+          }}
+        >
+          <Text as={Link} to="/user-bets" mt="-6px" fontWeight={600} w="full">
+            Current Bets
+          </Text>
+        </MenuItem>
         <MenuItem
           py="1"
           _hover={{
