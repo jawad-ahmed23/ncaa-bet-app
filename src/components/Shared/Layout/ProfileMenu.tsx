@@ -13,10 +13,14 @@ import { FaPowerOff } from "react-icons/fa";
 
 interface ProfileProps {
   onLogout: () => void;
+  currentUser: {
+    name: string;
+    email: string;
+  } | null;
 }
 
 export default function Profile(props: ProfileProps) {
-  const { onLogout } = props;
+  const { onLogout, currentUser } = props;
   return (
     <Menu>
       <MenuButton
@@ -25,7 +29,7 @@ export default function Profile(props: ProfileProps) {
         icon={
           <HStack>
             <IoPersonCircleSharp fontSize="40px" color="black" />
-            <Text>John Doe</Text>
+            <Text>{currentUser?.name}</Text>
           </HStack>
         }
       />
