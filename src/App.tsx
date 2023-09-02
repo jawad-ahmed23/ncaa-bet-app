@@ -8,7 +8,7 @@ import Signin from "./containers/Signin";
 import Register from "./containers/Register";
 import "./App.css";
 import { setCurrentUser } from "./slices/app";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { CSpinner } from "./components";
 import Guard from "./components/Shared/Guard";
 
@@ -44,6 +44,7 @@ function App() {
 
         dispatch(
           setCurrentUser({
+            uid: user.uid,
             ..._user,
           })
         );
