@@ -236,7 +236,7 @@ export default function CDashboard(props: CDashboardProps) {
                                       onClick={async () => {
                                         if (
                                           currentUser
-                                            ? currentUser.currentGuesses.some(
+                                            ? currentUser.currentGuesses?.some(
                                                 (el: { team: string }) =>
                                                   el.team ===
                                                   sport.bookmakers[0].markets[0]
@@ -257,7 +257,7 @@ export default function CDashboard(props: CDashboardProps) {
                                       }}
                                       isSelected={
                                         currentUser
-                                          ? currentUser.currentGuesses.some(
+                                          ? currentUser.currentGuesses?.some(
                                               (el: { team: string }) =>
                                                 el.team ===
                                                 sport.bookmakers[0].markets[0]
@@ -267,7 +267,7 @@ export default function CDashboard(props: CDashboardProps) {
                                       }
                                       disabled={
                                         currentUser
-                                          ? currentUser.currentGuesses.some(
+                                          ? currentUser.currentGuesses?.some(
                                               (el: { team: string }) =>
                                                 el.team ===
                                                 sport.bookmakers[0].markets[0]
@@ -296,7 +296,7 @@ export default function CDashboard(props: CDashboardProps) {
                                       onClick={async () => {
                                         if (
                                           currentUser
-                                            ? currentUser.currentGuesses.some(
+                                            ? currentUser.currentGuesses?.some(
                                                 (el: { team: string }) =>
                                                   el.team ===
                                                   sport.bookmakers[0].markets[0]
@@ -317,7 +317,7 @@ export default function CDashboard(props: CDashboardProps) {
                                       }}
                                       isSelected={
                                         currentUser
-                                          ? currentUser.currentGuesses.some(
+                                          ? currentUser.currentGuesses?.some(
                                               (el: { team: string }) =>
                                                 el.team ===
                                                 sport.bookmakers[0].markets[0]
@@ -327,7 +327,7 @@ export default function CDashboard(props: CDashboardProps) {
                                       }
                                       disabled={
                                         currentUser
-                                          ? currentUser.currentGuesses.some(
+                                          ? currentUser.currentGuesses?.some(
                                               (el: { team: string }) =>
                                                 el.team ===
                                                 sport.bookmakers[0].markets[0]
@@ -361,7 +361,7 @@ export default function CDashboard(props: CDashboardProps) {
                                       onClick={async () => {
                                         if (
                                           currentUser
-                                            ? currentUser.currentGuesses.some(
+                                            ? currentUser.currentGuesses?.some(
                                                 (el: { team: string }) =>
                                                   el.team ===
                                                   sport.bookmakers[0].markets[0]
@@ -382,7 +382,7 @@ export default function CDashboard(props: CDashboardProps) {
                                       }}
                                       isSelected={
                                         currentUser
-                                          ? currentUser.currentGuesses.some(
+                                          ? currentUser.currentGuesses?.some(
                                               (el: { team: string }) =>
                                                 el.team ===
                                                 sport.bookmakers[0].markets[0]
@@ -392,7 +392,7 @@ export default function CDashboard(props: CDashboardProps) {
                                       }
                                       disabled={
                                         currentUser
-                                          ? currentUser.currentGuesses.some(
+                                          ? currentUser.currentGuesses?.some(
                                               (el: { team: string }) =>
                                                 el.team ===
                                                 sport.bookmakers[0].markets[0]
@@ -421,7 +421,7 @@ export default function CDashboard(props: CDashboardProps) {
                                       onClick={async () => {
                                         if (
                                           currentUser
-                                            ? currentUser.currentGuesses.some(
+                                            ? currentUser.currentGuesses?.some(
                                                 (el: { team: string }) =>
                                                   el.team ===
                                                   sport.bookmakers[0].markets[0]
@@ -442,7 +442,7 @@ export default function CDashboard(props: CDashboardProps) {
                                       }}
                                       isSelected={
                                         currentUser
-                                          ? currentUser.currentGuesses.some(
+                                          ? currentUser.currentGuesses?.some(
                                               (el: { team: string }) =>
                                                 el.team ===
                                                 sport.bookmakers[0].markets[0]
@@ -452,7 +452,7 @@ export default function CDashboard(props: CDashboardProps) {
                                       }
                                       disabled={
                                         currentUser
-                                          ? currentUser.currentGuesses.some(
+                                          ? currentUser.currentGuesses?.some(
                                               (el: { team: string }) =>
                                                 el.team ===
                                                 sport.bookmakers[0].markets[0]
