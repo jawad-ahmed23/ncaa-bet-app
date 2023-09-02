@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { useSelector } from "react-redux";
 import {
   Box,
@@ -78,11 +79,33 @@ interface CDashboardProps {
   onAddGuess: ({ team }: { team: string }) => Promise<void>;
   onRemoveGuess: ({ team }: { team: string }) => Promise<void>;
   addGuessLoading: boolean;
+  onAddTotalsGuess: ({
+    id,
+    totals,
+  }: {
+    id: string;
+    totals: string;
+  }) => Promise<void>;
+  onRemoveTotalsGuess: ({
+    id,
+    totals,
+  }: {
+    id: string;
+    totals: string;
+  }) => Promise<void>;
 }
 
 export default function CDashboard(props: CDashboardProps) {
   const { currentUser } = useSelector((state: RootState) => state.app);
-  const { data, isLoading, onAddGuess, addGuessLoading, onRemoveGuess } = props;
+  const {
+    data,
+    isLoading,
+    onAddGuess,
+    addGuessLoading,
+    onRemoveGuess,
+    onAddTotalsGuess,
+    onRemoveTotalsGuess,
+  } = props;
 
   return (
     <Box maxW={{ base: "full", md: "80%" }} mx="auto">
@@ -276,7 +299,10 @@ export default function CDashboard(props: CDashboardProps) {
                                           : false
                                       }
                                       limitExceed={
-                                        currentUser?.currentGuesses?.length ===
+                                        (currentUser?.currentTotalsGuesses
+                                          ?.length || 0) +
+                                          (currentUser?.currentGuesses
+                                            ?.length || 0) ===
                                         3
                                       }
                                     />
@@ -336,7 +362,12 @@ export default function CDashboard(props: CDashboardProps) {
                                           : false
                                       }
                                       limitExceed={
-                                        currentUser?.currentGuesses?.length ===
+                                        (currentUser?.currentTotalsGuesses
+                                          ?.length ||
+                                          0 ||
+                                          0) +
+                                          (currentUser?.currentGuesses
+                                            ?.length || 0) ===
                                         3
                                       }
                                     />
@@ -361,47 +392,54 @@ export default function CDashboard(props: CDashboardProps) {
                                       onClick={async () => {
                                         if (
                                           currentUser
-                                            ? currentUser.currentGuesses?.some(
-                                                (el: { team: string }) =>
-                                                  el.team ===
-                                                  sport.bookmakers[0].markets[0]
-                                                    ?.outcomes[0].name
+                                            ? currentUser.currentTotalsGuesses?.some(
+                                                (el: {
+                                                  id: string;
+                                                  totals: string;
+                                                }) =>
+                                                  el.id === sport.id &&
+                                                  el.totals === "Over"
                                               )
                                             : false
                                         ) {
-                                          await onRemoveGuess({
-                                            team: sport.bookmakers[0].markets[0]
-                                              ?.outcomes[0].name,
+                                          await onRemoveTotalsGuess({
+                                            id: sport.id,
+                                            totals: "Over",
                                           });
                                         } else {
-                                          await onAddGuess({
-                                            team: sport.bookmakers[0].markets[0]
-                                              ?.outcomes[0].name,
+                                          await onAddTotalsGuess({
+                                            id: sport.id,
+                                            totals: "Over",
                                           });
                                         }
                                       }}
                                       isSelected={
                                         currentUser
-                                          ? currentUser.currentGuesses?.some(
-                                              (el: { team: string }) =>
-                                                el.team ===
-                                                sport.bookmakers[0].markets[0]
-                                                  ?.outcomes[0].name
+                                          ? currentUser.currentTotalsGuesses?.some(
+                                              (el: {
+                                                id: string;
+                                                totals: string;
+                                              }) =>
+                                                el.id === sport.id &&
+                                                el.totals === "Over"
                                             )
                                           : false
                                       }
                                       disabled={
                                         currentUser
-                                          ? currentUser.currentGuesses?.some(
-                                              (el: { team: string }) =>
-                                                el.team ===
-                                                sport.bookmakers[0].markets[0]
-                                                  ?.outcomes[1].name
+                                          ? currentUser.currentTotalsGuesses?.some(
+                                              (el: {
+                                                id: string;
+                                                totals: string;
+                                              }) => el.id === sport.id
                                             )
                                           : false
                                       }
                                       limitExceed={
-                                        currentUser?.currentGuesses?.length ===
+                                        (currentUser?.currentTotalsGuesses
+                                          ?.length || 0) +
+                                          (currentUser?.currentGuesses
+                                            ?.length || 0) ===
                                         3
                                       }
                                     />
@@ -421,47 +459,54 @@ export default function CDashboard(props: CDashboardProps) {
                                       onClick={async () => {
                                         if (
                                           currentUser
-                                            ? currentUser.currentGuesses?.some(
-                                                (el: { team: string }) =>
-                                                  el.team ===
-                                                  sport.bookmakers[0].markets[0]
-                                                    ?.outcomes[1].name
+                                            ? currentUser.currentTotalsGuesses?.some(
+                                                (el: {
+                                                  id: string;
+                                                  totals: string;
+                                                }) =>
+                                                  el.id === sport.id &&
+                                                  el.totals === "Under"
                                               )
                                             : false
                                         ) {
-                                          await onRemoveGuess({
-                                            team: sport.bookmakers[0].markets[0]
-                                              ?.outcomes[1].name,
+                                          await onRemoveTotalsGuess({
+                                            id: sport.id,
+                                            totals: "Under",
                                           });
                                         } else {
-                                          await onAddGuess({
-                                            team: sport.bookmakers[0].markets[0]
-                                              ?.outcomes[1].name,
+                                          await onAddTotalsGuess({
+                                            id: sport.id,
+                                            totals: "Under",
                                           });
                                         }
                                       }}
                                       isSelected={
                                         currentUser
-                                          ? currentUser.currentGuesses?.some(
-                                              (el: { team: string }) =>
-                                                el.team ===
-                                                sport.bookmakers[0].markets[0]
-                                                  ?.outcomes[1].name
+                                          ? currentUser.currentTotalsGuesses?.some(
+                                              (el: {
+                                                id: string;
+                                                totals: string;
+                                              }) =>
+                                                el.id === sport.id &&
+                                                el.totals === "Under"
                                             )
                                           : false
                                       }
                                       disabled={
                                         currentUser
-                                          ? currentUser.currentGuesses?.some(
-                                              (el: { team: string }) =>
-                                                el.team ===
-                                                sport.bookmakers[0].markets[0]
-                                                  ?.outcomes[0].name
+                                          ? currentUser.currentTotalsGuesses?.some(
+                                              (el: {
+                                                id: string;
+                                                totals: string;
+                                              }) => el.id === sport.id
                                             )
                                           : false
                                       }
                                       limitExceed={
-                                        currentUser?.currentGuesses?.length ===
+                                        (currentUser?.currentTotalsGuesses
+                                          ?.length || 0) +
+                                          (currentUser?.currentGuesses
+                                            ?.length || 0) ===
                                         3
                                       }
                                     />

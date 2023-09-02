@@ -7,6 +7,10 @@ interface ICurrentUser {
   currentGuesses: {
     team: string;
   }[];
+  currentTotalsGuesses: {
+    id: string;
+    totals: string;
+  }[];
 }
 
 const initialState: {
@@ -27,9 +31,15 @@ const appSlice = createSlice({
         state.currentUser.currentGuesses = action.payload;
       }
     },
+    setTotalsGuesses: (state, action) => {
+      if (state.currentUser) {
+        state.currentUser.currentTotalsGuesses = action.payload;
+      }
+    },
   },
 });
 
-export const { setCurrentUser, setCurrentGuesses } = appSlice.actions;
+export const { setCurrentUser, setCurrentGuesses, setTotalsGuesses } =
+  appSlice.actions;
 
 export default appSlice.reducer;
