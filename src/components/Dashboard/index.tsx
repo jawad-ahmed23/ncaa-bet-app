@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
-import { useSelector } from "react-redux";
 import {
   Box,
   Text,
@@ -18,7 +16,6 @@ import {
 import { BsCheckLg } from "react-icons/bs";
 import { CSpinner } from "..";
 import moment from "moment";
-import { RootState } from "../../slices/store";
 
 interface CustomCheckbox extends BoxProps {
   disabled?: boolean;
@@ -76,101 +73,42 @@ export interface IMatchObject {
 interface CDashboardProps {
   data?: IMatchObject[];
   isLoading: boolean;
-  onAddGuess: ({ team }: { team: string }) => Promise<void>;
-  onRemoveGuess: ({ team }: { team: string }) => Promise<void>;
-  addGuessLoading: boolean;
-  onAddTotalsGuess: ({
-    id,
-    totals,
-  }: {
-    id: string;
-    totals: string;
-  }) => Promise<void>;
-  onRemoveTotalsGuess: ({
-    id,
-    totals,
-  }: {
-    id: string;
-    totals: string;
-  }) => Promise<void>;
+  onSetBet: (bet: {
+    gameId: string;
+    status: string;
+    team?: string;
+    type: string;
+    spread?: number;
+    totals?: string;
+    point?: number;
+  }) => void;
+  bets: {
+    gameId: string;
+    status: string;
+    team?: string;
+    type: string;
+    spread?: number;
+    totals?: string;
+    point?: number;
+  }[];
+  removeBet: (gameId: string, type: string) => void;
+  isSubmittedForCurrentWeek: boolean;
 }
 
 export default function CDashboard(props: CDashboardProps) {
-  const { currentUser } = useSelector((state: RootState) => state.app);
   const {
     data,
     isLoading,
-    onAddGuess,
-    addGuessLoading,
-    onRemoveGuess,
-    onAddTotalsGuess,
-    onRemoveTotalsGuess,
+    bets,
+    onSetBet,
+    removeBet,
+    isSubmittedForCurrentWeek,
   } = props;
 
   return (
-    <Box maxW={{ base: "full", md: "80%" }} mx="auto">
+    <Box w="full" maxW={{ base: "full", md: "full" }} mx="auto">
       <Stack direction={{ base: "column", md: "row" }} gap="5" h="full">
-        {/* <Box
-          w={{ base: "full", md: "20%" }}
-          bg="#fff"
-          color="brand.primary"
-          px="5"
-          py="3"
-          rounded="lg"
-        >
-          <Box mb="10">
-            <Text fontSize="lg" fontWeight={700} mb="2">
-              Live Matches
-            </Text>
-            <HStack justifyContent="center" spacing="5">
-              <Image src={team1Src} />
-              <Text color="#A0A8B1">
-                <Text as="span">3</Text>
-                <Text as="span" px="3">
-                  :
-                </Text>
-                <Text as="span">2</Text>
-              </Text>
-              <Image src={team2Src} />
-            </HStack>
-          </Box>
-
-          <Box>
-            <Text fontSize="lg" fontWeight={700} mb="2">
-              Teams
-            </Text>
-
-            <VStack alignItems="flex-start" spacing="4">
-              <HStack spacing="4">
-                <Image src={team2Src} />
-                <Text color="#A0A8B1">Tigers VI</Text>
-              </HStack>
-              <HStack spacing="4">
-                <Image src={team2Src} />
-                <Text color="#A0A8B1">Tigers VI</Text>
-              </HStack>
-              <HStack spacing="4">
-                <Image src={team2Src} />
-                <Text color="#A0A8B1">Tigers VI</Text>
-              </HStack>
-              <HStack spacing="4">
-                <Image src={team2Src} />
-                <Text color="#A0A8B1">Tigers VI</Text>
-              </HStack>
-              <HStack spacing="4">
-                <Image src={team2Src} />
-                <Text color="#A0A8B1">Tigers VI</Text>
-              </HStack>
-              <HStack spacing="4">
-                <Image src={team2Src} />
-                <Text color="#A0A8B1">Tigers VI</Text>
-              </HStack>
-            </VStack>
-          </Box>
-        </Box> */}
-
         <Box
-          // w={{ base: "full", md: "80%" }}
           w={{ base: "full", md: "full" }}
           bgColor="#fff"
           color="brand.primary"
@@ -207,6 +145,13 @@ export default function CDashboard(props: CDashboardProps) {
                 <Tbody>
                   {data
                     ? data.map((sport) => {
+                        if (
+                          moment(sport.commence_time).format("dddd") !==
+                          "Saturday"
+                        ) {
+                          return null;
+                        }
+
                         return (
                           <Tr key={sport.id} bgColor="#F3F4F7">
                             <Td
@@ -256,55 +201,50 @@ export default function CDashboard(props: CDashboardProps) {
                                       }
                                     </Box>
                                     <CustomCheckbox
-                                      onClick={async () => {
+                                      pointerEvents={
+                                        isSubmittedForCurrentWeek
+                                          ? "none"
+                                          : "all"
+                                      }
+                                      onClick={() => {
                                         if (
-                                          currentUser
-                                            ? currentUser.currentGuesses?.some(
-                                                (el: { team: string }) =>
-                                                  el.team ===
-                                                  sport.bookmakers[0].markets[0]
-                                                    ?.outcomes[0].name
-                                              )
-                                            : false
+                                          bets.some((bet) => {
+                                            return (
+                                              bet.team ===
+                                              sport.bookmakers[0].markets[0]
+                                                .outcomes[0].name
+                                            );
+                                          })
                                         ) {
-                                          await onRemoveGuess({
-                                            team: sport.bookmakers[0].markets[0]
-                                              ?.outcomes[0].name,
-                                          });
+                                          removeBet(sport.id, "Spread");
                                         } else {
-                                          await onAddGuess({
+                                          onSetBet({
+                                            gameId: sport.id,
+                                            status: "in-progress",
                                             team: sport.bookmakers[0].markets[0]
-                                              ?.outcomes[0].name,
+                                              .outcomes[0].name,
+                                            type: "Spread",
+                                            spread:
+                                              sport.bookmakers[0].markets[0]
+                                                .outcomes[0].point,
                                           });
                                         }
                                       }}
-                                      isSelected={
-                                        currentUser
-                                          ? currentUser.currentGuesses?.some(
-                                              (el: { team: string }) =>
-                                                el.team ===
-                                                sport.bookmakers[0].markets[0]
-                                                  ?.outcomes[0].name
-                                            )
-                                          : false
-                                      }
-                                      disabled={
-                                        currentUser
-                                          ? currentUser.currentGuesses?.some(
-                                              (el: { team: string }) =>
-                                                el.team ===
-                                                sport.bookmakers[0].markets[0]
-                                                  ?.outcomes[1].name
-                                            )
-                                          : false
-                                      }
-                                      limitExceed={
-                                        (currentUser?.currentTotalsGuesses
-                                          ?.length || 0) +
-                                          (currentUser?.currentGuesses
-                                            ?.length || 0) ===
-                                        3
-                                      }
+                                      isSelected={bets.some((bet) => {
+                                        return (
+                                          bet.team ===
+                                          sport.bookmakers[0].markets[0]
+                                            .outcomes[0].name
+                                        );
+                                      })}
+                                      disabled={bets.some((bet) => {
+                                        return (
+                                          bet.team ===
+                                          sport.bookmakers[0].markets[0]
+                                            .outcomes[1].name
+                                        );
+                                      })}
+                                      limitExceed={bets.length === 3}
                                     />
                                   </>
                                 ) : null}
@@ -319,61 +259,53 @@ export default function CDashboard(props: CDashboardProps) {
                                       }
                                     </Box>
                                     <CustomCheckbox
-                                      onClick={async () => {
+                                      pointerEvents={
+                                        isSubmittedForCurrentWeek
+                                          ? "none"
+                                          : "all"
+                                      }
+                                      onClick={() => {
                                         if (
-                                          currentUser
-                                            ? currentUser.currentGuesses?.some(
-                                                (el: { team: string }) =>
-                                                  el.team ===
-                                                  sport.bookmakers[0].markets[0]
-                                                    ?.outcomes[1].name
-                                              )
-                                            : false
+                                          bets.some((bet) => {
+                                            return (
+                                              bet.team ===
+                                              sport.bookmakers[0].markets[0]
+                                                .outcomes[1].name
+                                            );
+                                          })
                                         ) {
-                                          await onRemoveGuess({
-                                            team: sport.bookmakers[0].markets[0]
-                                              ?.outcomes[1].name,
-                                          });
+                                          removeBet(sport.id, "spread");
                                         } else {
-                                          await onAddGuess({
+                                          onSetBet({
+                                            gameId: sport.id,
+                                            status: "in-progress",
                                             team: sport.bookmakers[0].markets[0]
-                                              ?.outcomes[1].name,
+                                              .outcomes[1].name,
+                                            type: "spread",
+                                            spread:
+                                              sport.bookmakers[0].markets[0]
+                                                .outcomes[1].point,
                                           });
                                         }
                                       }}
-                                      isSelected={
-                                        currentUser
-                                          ? currentUser.currentGuesses?.some(
-                                              (el: { team: string }) =>
-                                                el.team ===
-                                                sport.bookmakers[0].markets[0]
-                                                  ?.outcomes[1].name
-                                            )
-                                          : false
-                                      }
-                                      disabled={
-                                        currentUser
-                                          ? currentUser.currentGuesses?.some(
-                                              (el: { team: string }) =>
-                                                el.team ===
-                                                sport.bookmakers[0].markets[0]
-                                                  ?.outcomes[0].name
-                                            )
-                                          : false
-                                      }
-                                      limitExceed={
-                                        (currentUser?.currentTotalsGuesses
-                                          ?.length ||
-                                          0 ||
-                                          0) +
-                                          (currentUser?.currentGuesses
-                                            ?.length || 0) ===
-                                        3
-                                      }
+                                      isSelected={bets.some((bet) => {
+                                        return (
+                                          bet.team ===
+                                          sport.bookmakers[0].markets[0]
+                                            .outcomes[1].name
+                                        );
+                                      })}
+                                      disabled={bets.some((bet) => {
+                                        return (
+                                          bet.team ===
+                                          sport.bookmakers[0].markets[0]
+                                            .outcomes[0].name
+                                        );
+                                      })}
+                                      limitExceed={bets.length === 3}
                                     />
                                   </>
                                 ) : null}
-                                {addGuessLoading ? <CSpinner /> : null}
                               </HStack>
                             </Td>
 
@@ -389,59 +321,54 @@ export default function CDashboard(props: CDashboardProps) {
                                       }
                                     </Box>
                                     <CustomCheckbox
-                                      onClick={async () => {
+                                      pointerEvents={
+                                        isSubmittedForCurrentWeek
+                                          ? "none"
+                                          : "all"
+                                      }
+                                      onClick={() => {
                                         if (
-                                          currentUser
-                                            ? currentUser.currentTotalsGuesses?.some(
-                                                (el: {
-                                                  id: string;
-                                                  totals: string;
-                                                }) =>
-                                                  el.id === sport.id &&
-                                                  el.totals === "Over"
-                                              )
-                                            : false
+                                          bets.some((bet) => {
+                                            return (
+                                              bet.gameId === sport.id &&
+                                              bet.totals ===
+                                                sport.bookmakers[0].markets[1]
+                                                  ?.outcomes[0].name
+                                            );
+                                          })
                                         ) {
-                                          await onRemoveTotalsGuess({
-                                            id: sport.id,
-                                            totals: "Over",
-                                          });
+                                          removeBet(sport.id, "totals");
                                         } else {
-                                          await onAddTotalsGuess({
-                                            id: sport.id,
-                                            totals: "Over",
+                                          onSetBet({
+                                            gameId: sport.id,
+                                            status: "in-progress",
+                                            type: "totals",
+                                            totals:
+                                              sport.bookmakers[0].markets[1]
+                                                ?.outcomes[0].name,
+                                            point:
+                                              sport.bookmakers[0].markets[1]
+                                                ?.outcomes[0].point,
                                           });
                                         }
                                       }}
-                                      isSelected={
-                                        currentUser
-                                          ? currentUser.currentTotalsGuesses?.some(
-                                              (el: {
-                                                id: string;
-                                                totals: string;
-                                              }) =>
-                                                el.id === sport.id &&
-                                                el.totals === "Over"
-                                            )
-                                          : false
-                                      }
-                                      disabled={
-                                        currentUser
-                                          ? currentUser.currentTotalsGuesses?.some(
-                                              (el: {
-                                                id: string;
-                                                totals: string;
-                                              }) => el.id === sport.id
-                                            )
-                                          : false
-                                      }
-                                      limitExceed={
-                                        (currentUser?.currentTotalsGuesses
-                                          ?.length || 0) +
-                                          (currentUser?.currentGuesses
-                                            ?.length || 0) ===
-                                        3
-                                      }
+                                      isSelected={bets.some((bet) => {
+                                        return (
+                                          bet.gameId === sport.id &&
+                                          bet.totals ===
+                                            sport.bookmakers[0].markets[1]
+                                              ?.outcomes[0].name
+                                        );
+                                      })}
+                                      disabled={bets.some((bet) => {
+                                        return (
+                                          bet.gameId === sport.id &&
+                                          bet.totals ===
+                                            sport.bookmakers[0].markets[1]
+                                              ?.outcomes[1].name
+                                        );
+                                      })}
+                                      limitExceed={bets.length === 3}
                                     />
                                   </>
                                 ) : null}
@@ -456,59 +383,54 @@ export default function CDashboard(props: CDashboardProps) {
                                       }
                                     </Box>
                                     <CustomCheckbox
-                                      onClick={async () => {
+                                      pointerEvents={
+                                        isSubmittedForCurrentWeek
+                                          ? "none"
+                                          : "all"
+                                      }
+                                      onClick={() => {
                                         if (
-                                          currentUser
-                                            ? currentUser.currentTotalsGuesses?.some(
-                                                (el: {
-                                                  id: string;
-                                                  totals: string;
-                                                }) =>
-                                                  el.id === sport.id &&
-                                                  el.totals === "Under"
-                                              )
-                                            : false
+                                          bets.some((bet) => {
+                                            return (
+                                              bet.gameId === sport.id &&
+                                              bet.totals ===
+                                                sport.bookmakers[0].markets[1]
+                                                  ?.outcomes[1].name
+                                            );
+                                          })
                                         ) {
-                                          await onRemoveTotalsGuess({
-                                            id: sport.id,
-                                            totals: "Under",
-                                          });
+                                          removeBet(sport.id, "totals");
                                         } else {
-                                          await onAddTotalsGuess({
-                                            id: sport.id,
-                                            totals: "Under",
+                                          onSetBet({
+                                            gameId: sport.id,
+                                            status: "in-progress",
+                                            type: "totals",
+                                            totals:
+                                              sport.bookmakers[0].markets[1]
+                                                ?.outcomes[1].name,
+                                            point:
+                                              sport.bookmakers[0].markets[1]
+                                                ?.outcomes[1].point,
                                           });
                                         }
                                       }}
-                                      isSelected={
-                                        currentUser
-                                          ? currentUser.currentTotalsGuesses?.some(
-                                              (el: {
-                                                id: string;
-                                                totals: string;
-                                              }) =>
-                                                el.id === sport.id &&
-                                                el.totals === "Under"
-                                            )
-                                          : false
-                                      }
-                                      disabled={
-                                        currentUser
-                                          ? currentUser.currentTotalsGuesses?.some(
-                                              (el: {
-                                                id: string;
-                                                totals: string;
-                                              }) => el.id === sport.id
-                                            )
-                                          : false
-                                      }
-                                      limitExceed={
-                                        (currentUser?.currentTotalsGuesses
-                                          ?.length || 0) +
-                                          (currentUser?.currentGuesses
-                                            ?.length || 0) ===
-                                        3
-                                      }
+                                      isSelected={bets.some((bet) => {
+                                        return (
+                                          bet.gameId === sport.id &&
+                                          bet.totals ===
+                                            sport.bookmakers[0].markets[1]
+                                              ?.outcomes[1].name
+                                        );
+                                      })}
+                                      disabled={bets.some((bet) => {
+                                        return (
+                                          bet.gameId === sport.id &&
+                                          bet.totals ===
+                                            sport.bookmakers[0].markets[1]
+                                              ?.outcomes[0].name
+                                        );
+                                      })}
+                                      limitExceed={bets.length === 3}
                                     />
                                   </>
                                 ) : null}

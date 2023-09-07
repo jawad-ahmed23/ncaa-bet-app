@@ -1,14 +1,16 @@
 import { Suspense, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebase";
+import { collection, where, onSnapshot, query } from "firebase/firestore";
 import { Dashboard, Register, Signin, UserBets } from "./containers";
 import "./App.css";
-import { setCurrentUser } from "./slices/app";
+import { setBets, setCurrentUser } from "./slices/app";
 import { doc, getDoc } from "firebase/firestore";
 import { CSpinner } from "./components";
 import Guard from "./components/Shared/Guard";
+import { RootState } from "./slices/store";
 
 const routes = [
   {
@@ -34,6 +36,7 @@ const routes = [
 ];
 
 function App() {
+  const { currentUser } = useSelector((state: RootState) => state.app);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -60,6 +63,23 @@ function App() {
       return unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    let unsubscribe: any = null;
+    if (currentUser) {
+      const q = doc(db, "bets", currentUser.uid);
+      unsubscribe = onSnapshot(q, (querySnapshot) => {
+        console.log(querySnapshot.data());
+        dispatch(setBets(querySnapshot.data()));
+      });
+    }
+
+    () => {
+      if (unsubscribe) {
+        return unsubscribe();
+      }
+    };
+  }, [currentUser]);
 
   return (
     <Routes>
