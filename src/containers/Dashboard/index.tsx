@@ -89,16 +89,29 @@ export default function Dashboard() {
         const key = betsWeeks[betsWeeks.length - 1];
 
         const weekNumber = key.split("-")[1];
-        setBets(RBets["week-" + weekNumber]);
+        if (
+          !RBets["week-" + weekNumber].every(
+            (bet) => bet.status === "completed"
+          )
+        ) {
+          setBets(RBets["week-" + weekNumber]);
+        }
 
-        if (RBets["week-" + weekNumber].length === 3) {
+        if (
+          RBets["week-" + weekNumber].length === 3 &&
+          !RBets["week-" + weekNumber].every(
+            (bet) => bet.status === "completed"
+          )
+        ) {
           setIsSubmittedForCurrentWeek(true);
         }
       }
     }
 
     () => {
-      return setBets([]);
+      setBets([]);
+
+      return;
     };
   }, [RBets]);
 

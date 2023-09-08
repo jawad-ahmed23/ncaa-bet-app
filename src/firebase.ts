@@ -8,13 +8,13 @@ import { getFirestore } from "firebase/firestore";
 // Your web app's Firebase configuration
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCicCHj5wiSWQNvm-gne-jrqoIGyVtgv2w",
-  authDomain: "ncaa-app-4f0c7.firebaseapp.com",
-  projectId: "ncaa-app-4f0c7",
-  storageBucket: "ncaa-app-4f0c7.appspot.com",
-  messagingSenderId: "684306336247",
-  appId: "1:684306336247:web:e8364a1a5bd1236ffa86f2",
-  measurementId: "G-ERZ8EJGJPW",
+  apiKey: "AIzaSyBM-q8VuNiGft2sJW4-yb9dgMgPnzxq3XA",
+  authDomain: "has-been-pickem.firebaseapp.com",
+  projectId: "has-been-pickem",
+  storageBucket: "has-been-pickem.appspot.com",
+  messagingSenderId: "538555395504",
+  appId: "1:538555395504:web:035efb06086a104a92fa75",
+  measurementId: "G-46V5XLJ9ZB",
 };
 
 // Initialize Firebase

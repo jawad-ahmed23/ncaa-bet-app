@@ -171,8 +171,8 @@ export default function CDashboard(props: CDashboardProps) {
                                   {/* <Image src={team1Src} width={"20px"} /> */}
                                   <Text color="#A0A8B1">
                                     {
-                                      sport.bookmakers[0].markets[0].outcomes[0]
-                                        .name
+                                      sport.bookmakers[0]?.markets[0]
+                                        .outcomes[0].name
                                     }
                                   </Text>
                                 </HStack>
@@ -181,8 +181,8 @@ export default function CDashboard(props: CDashboardProps) {
                                   {/* <Image src={team2Src} width={"20px"} /> */}
                                   <Text color="#A0A8B1">
                                     {
-                                      sport.bookmakers[0].markets[0].outcomes[1]
-                                        .name
+                                      sport.bookmakers[0]?.markets[0]
+                                        .outcomes[1].name
                                     }
                                   </Text>
                                 </HStack>
@@ -192,11 +192,11 @@ export default function CDashboard(props: CDashboardProps) {
                             {/* ---------------------- */}
                             <Td>
                               <HStack justifyContent="center" mb="5">
-                                {sport.bookmakers[0].markets[0] ? (
+                                {sport.bookmakers[0]?.markets[0] ? (
                                   <>
                                     <Box bgColor="#FF9F1C" p="2" rounded="lg">
                                       {
-                                        sport.bookmakers[0].markets[0]
+                                        sport.bookmakers[0]?.markets[0]
                                           ?.outcomes[0].point
                                       }
                                     </Box>
@@ -211,7 +211,7 @@ export default function CDashboard(props: CDashboardProps) {
                                           bets.some((bet) => {
                                             return (
                                               bet.team ===
-                                              sport.bookmakers[0].markets[0]
+                                              sport.bookmakers[0]?.markets[0]
                                                 .outcomes[0].name
                                             );
                                           })
@@ -221,11 +221,11 @@ export default function CDashboard(props: CDashboardProps) {
                                           onSetBet({
                                             gameId: sport.id,
                                             status: "in-progress",
-                                            team: sport.bookmakers[0].markets[0]
-                                              .outcomes[0].name,
+                                            team: sport.bookmakers[0]
+                                              ?.markets[0].outcomes[0].name,
                                             type: "Spread",
                                             spread:
-                                              sport.bookmakers[0].markets[0]
+                                              sport.bookmakers[0]?.markets[0]
                                                 .outcomes[0].point,
                                           });
                                         }
@@ -233,14 +233,14 @@ export default function CDashboard(props: CDashboardProps) {
                                       isSelected={bets.some((bet) => {
                                         return (
                                           bet.team ===
-                                          sport.bookmakers[0].markets[0]
+                                          sport.bookmakers[0]?.markets[0]
                                             .outcomes[0].name
                                         );
                                       })}
                                       disabled={bets.some((bet) => {
                                         return (
                                           bet.team ===
-                                          sport.bookmakers[0].markets[0]
+                                          sport.bookmakers[0]?.markets[0]
                                             .outcomes[1].name
                                         );
                                       })}
@@ -250,11 +250,11 @@ export default function CDashboard(props: CDashboardProps) {
                                 ) : null}
                               </HStack>
                               <HStack justifyContent="center">
-                                {sport.bookmakers[0].markets[0] ? (
+                                {sport.bookmakers[0]?.markets[0] ? (
                                   <>
                                     <Box bgColor="#FF9F1C" p="2" rounded="lg">
                                       {
-                                        sport.bookmakers[0].markets[0]
+                                        sport.bookmakers[0]?.markets[0]
                                           ?.outcomes[1].point
                                       }
                                     </Box>
@@ -269,7 +269,7 @@ export default function CDashboard(props: CDashboardProps) {
                                           bets.some((bet) => {
                                             return (
                                               bet.team ===
-                                              sport.bookmakers[0].markets[0]
+                                              sport.bookmakers[0]?.markets[0]
                                                 .outcomes[1].name
                                             );
                                           })
@@ -279,11 +279,11 @@ export default function CDashboard(props: CDashboardProps) {
                                           onSetBet({
                                             gameId: sport.id,
                                             status: "in-progress",
-                                            team: sport.bookmakers[0].markets[0]
-                                              .outcomes[1].name,
+                                            team: sport.bookmakers[0]
+                                              ?.markets[0].outcomes[1].name,
                                             type: "spread",
                                             spread:
-                                              sport.bookmakers[0].markets[0]
+                                              sport.bookmakers[0]?.markets[0]
                                                 .outcomes[1].point,
                                           });
                                         }
@@ -291,14 +291,14 @@ export default function CDashboard(props: CDashboardProps) {
                                       isSelected={bets.some((bet) => {
                                         return (
                                           bet.team ===
-                                          sport.bookmakers[0].markets[0]
+                                          sport.bookmakers[0]?.markets[0]
                                             .outcomes[1].name
                                         );
                                       })}
                                       disabled={bets.some((bet) => {
                                         return (
                                           bet.team ===
-                                          sport.bookmakers[0].markets[0]
+                                          sport.bookmakers[0]?.markets[0]
                                             .outcomes[0].name
                                         );
                                       })}
@@ -312,11 +312,11 @@ export default function CDashboard(props: CDashboardProps) {
                             {/* ----------------------------- */}
                             <Td>
                               <HStack justifyContent="center" mb="4">
-                                {sport.bookmakers[0].markets[1] ? (
+                                {sport.bookmakers[0]?.markets[1] ? (
                                   <>
                                     <Box bgColor="#FF9F1C" p="2" rounded="lg">
                                       {
-                                        sport.bookmakers[0].markets[1]
+                                        sport.bookmakers[0]?.markets[1]
                                           ?.outcomes[0].point
                                       }
                                     </Box>
@@ -332,7 +332,7 @@ export default function CDashboard(props: CDashboardProps) {
                                             return (
                                               bet.gameId === sport.id &&
                                               bet.totals ===
-                                                sport.bookmakers[0].markets[1]
+                                                sport.bookmakers[0]?.markets[1]
                                                   ?.outcomes[0].name
                                             );
                                           })
@@ -344,10 +344,10 @@ export default function CDashboard(props: CDashboardProps) {
                                             status: "in-progress",
                                             type: "totals",
                                             totals:
-                                              sport.bookmakers[0].markets[1]
+                                              sport.bookmakers[0]?.markets[1]
                                                 ?.outcomes[0].name,
                                             point:
-                                              sport.bookmakers[0].markets[1]
+                                              sport.bookmakers[0]?.markets[1]
                                                 ?.outcomes[0].point,
                                           });
                                         }
@@ -356,7 +356,7 @@ export default function CDashboard(props: CDashboardProps) {
                                         return (
                                           bet.gameId === sport.id &&
                                           bet.totals ===
-                                            sport.bookmakers[0].markets[1]
+                                            sport.bookmakers[0]?.markets[1]
                                               ?.outcomes[0].name
                                         );
                                       })}
@@ -364,7 +364,7 @@ export default function CDashboard(props: CDashboardProps) {
                                         return (
                                           bet.gameId === sport.id &&
                                           bet.totals ===
-                                            sport.bookmakers[0].markets[1]
+                                            sport.bookmakers[0]?.markets[1]
                                               ?.outcomes[1].name
                                         );
                                       })}
@@ -374,11 +374,11 @@ export default function CDashboard(props: CDashboardProps) {
                                 ) : null}
                               </HStack>
                               <HStack justifyContent="center">
-                                {sport.bookmakers[0].markets[1] ? (
+                                {sport.bookmakers[0]?.markets[1] ? (
                                   <>
                                     <Box bgColor="#FF9F1C" p="2" rounded="lg">
                                       {
-                                        sport.bookmakers[0].markets[1]
+                                        sport.bookmakers[0]?.markets[1]
                                           ?.outcomes[1].point
                                       }
                                     </Box>
@@ -394,7 +394,7 @@ export default function CDashboard(props: CDashboardProps) {
                                             return (
                                               bet.gameId === sport.id &&
                                               bet.totals ===
-                                                sport.bookmakers[0].markets[1]
+                                                sport.bookmakers[0]?.markets[1]
                                                   ?.outcomes[1].name
                                             );
                                           })
@@ -406,10 +406,10 @@ export default function CDashboard(props: CDashboardProps) {
                                             status: "in-progress",
                                             type: "totals",
                                             totals:
-                                              sport.bookmakers[0].markets[1]
+                                              sport.bookmakers[0]?.markets[1]
                                                 ?.outcomes[1].name,
                                             point:
-                                              sport.bookmakers[0].markets[1]
+                                              sport.bookmakers[0]?.markets[1]
                                                 ?.outcomes[1].point,
                                           });
                                         }
@@ -418,7 +418,7 @@ export default function CDashboard(props: CDashboardProps) {
                                         return (
                                           bet.gameId === sport.id &&
                                           bet.totals ===
-                                            sport.bookmakers[0].markets[1]
+                                            sport.bookmakers[0]?.markets[1]
                                               ?.outcomes[1].name
                                         );
                                       })}
@@ -426,7 +426,7 @@ export default function CDashboard(props: CDashboardProps) {
                                         return (
                                           bet.gameId === sport.id &&
                                           bet.totals ===
-                                            sport.bookmakers[0].markets[1]
+                                            sport.bookmakers[0]?.markets[1]
                                               ?.outcomes[0].name
                                         );
                                       })}

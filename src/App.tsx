@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebase";
-import { collection, where, onSnapshot, query } from "firebase/firestore";
-import { Dashboard, Register, Signin, UserBets } from "./containers";
+import { onSnapshot } from "firebase/firestore";
+import { Dashboard, Register, Signin } from "./containers";
 import "./App.css";
 import { setBets, setCurrentUser } from "./slices/app";
 import { doc, getDoc } from "firebase/firestore";
@@ -28,11 +28,11 @@ const routes = [
     Comp: Register,
     guarded: false,
   },
-  {
-    path: "/user-bets",
-    Comp: UserBets,
-    guarded: false,
-  },
+  // {
+  //   path: "/user-bets",
+  //   Comp: UserBets,
+  //   guarded: false,
+  // },
 ];
 
 function App() {
